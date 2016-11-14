@@ -64,20 +64,19 @@ public class Program4 extends Application {
 	private ArrayList<String> history = new ArrayList<String>();
 	private String defaultAddress = "http://www.bing.com";
 	private TextField address = new TextField(defaultAddress);
-	private String title = "";
 	private Pane window = null;
 
 	private int height = 600;
 	private int width = 800;
-	
+
 	private Button backButton = new Button();
 	private Button forwardButton = new Button();
 
 	private Image forward = new Image("https://i.gyazo.com/802bef2d69de6f917d4a0b66985f099b.png", 40, 40, true, true);
 	private Image back = new Image("https://i.gyazo.com/d72ae41fc374cf0ee62a3ef739e7c95d.jpg", 40, 40, true, true);
 	private Image back_gray = new Image("https://i.gyazo.com/15ee5f494367bb1c3c5291c9c6626e88.png", 40, 40, true, true);
-	private Image forward_gray = new Image("https://i.gyazo.com/2b6d3a99b9a582ee156d2ef143be7e9b.png", 40, 40, true, true);
-	
+	private Image forward_gray = new Image("https://i.gyazo.com/2b6d3a99b9a582ee156d2ef143be7e9b.png", 40, 40, true,
+			true);
 
 	/**
 	 * 
@@ -110,6 +109,7 @@ public class Program4 extends Application {
 		commandBar.prefHeightProperty().bind(height.multiply(0.05));
 		commandBar.prefWidthProperty().bind(width);
 
+		stage.titleProperty().bind(webEngine.titleProperty());
 	}
 
 	// HELPER METHODS
@@ -203,7 +203,7 @@ public class Program4 extends Application {
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.getCode().equals(KeyCode.ENTER)) {
-					goToPage(address.getText());
+					goToPage(address.getText(), null);
 				}
 
 			}
@@ -218,7 +218,7 @@ public class Program4 extends Application {
 	 * 
 	 * @param URL
 	 */
-	private void goToPage(String URL) {
+	private void goToPage(String URL, String path) {
 		if (URL == null || URL.isEmpty() || URL.trim().isEmpty()) {
 			// Do nothing.
 		} else {
@@ -227,12 +227,13 @@ public class Program4 extends Application {
 			}
 			webEngine.load(URL);
 			address.setText(URL);
-			history.add(URL);
-			this.backButton.setGraphic(new ImageView(this.back));
-			if (findLevel(address.getText()) == history.size() -1) {
-				this.forwardButton.setGraphic(new ImageView(this.forward_gray));
+			if (path == null) {
+				history.add(URL);
 			}
-			else {
+			this.backButton.setGraphic(new ImageView(this.back));
+			if (findLevel(address.getText()) == (history.size() - 1)) {
+				this.forwardButton.setGraphic(new ImageView(this.forward_gray));
+			} else {
 				this.forwardButton.setGraphic(new ImageView(this.forward));
 			}
 		}
@@ -256,7 +257,7 @@ public class Program4 extends Application {
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
-					goToPage(address.getText());
+					goToPage(address.getText(), null);
 				} else if (event.getButton().equals(MouseButton.SECONDARY)) {
 					// plan to allow changes of home page.
 				} else {
@@ -270,7 +271,7 @@ public class Program4 extends Application {
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
-					goToPage(defaultAddress);
+					goToPage(defaultAddress, null);
 				} else if (event.getButton().equals(MouseButton.SECONDARY)) {
 					// right click
 				} else {
@@ -285,15 +286,14 @@ public class Program4 extends Application {
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
-					if (findLevel(address.getText()) == 0){
+					if (findLevel(address.getText()) == 0) {
 						back.setGraphic(new ImageView(new Program4().back_gray));
-					}
-					else {
-					goToPage(history.get(findLevel(address.getText()) - 1));
+					} else {
+						goToPage(history.get(findLevel(address.getText()) - 1), "tacos");
 					}
 				} else if (event.getButton().equals(MouseButton.SECONDARY)) {
 					// right click
-					
+
 				} else {
 					// maybe do something on scroll wheel click? maybe not?
 				}
@@ -306,13 +306,13 @@ public class Program4 extends Application {
 			public void handle(MouseEvent event) {
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
 
-					if (findLevel(address.getText()) == (history.size()-1)){
+					if (findLevel(address.getText()) == (history.size())) {
+						System.out.println(findLevel(address.getText()));
+						System.out.println("310");
 						forward.setGraphic(new ImageView(new Program4().forward_gray));
+					} else {
+						goToPage(history.get(findLevel(address.getText())), "yas");
 					}
-					else {
-					goToPage(history.get(findLevel(address.getText()) + 1));
-					}
-				
 
 				} else if (event.getButton().equals(MouseButton.SECONDARY)) {
 					// right click
@@ -345,10 +345,15 @@ public class Program4 extends Application {
 	/**
 	 * 
 	 */
-	private void historyBox() {
-
-	}
-
+	/*
+	 * private void historyBox() {
+	 * 
+	 * Eventually want to add in a "history box" on right clicking back history button.
+	 * 
+	 * }
+	 */
+	
+	
 	/**
 	 * setupView
 	 * 
@@ -427,11 +432,11 @@ public class Program4 extends Application {
 		// EventMegaHandler
 
 		// Home page stuff.
-		
+
 		if (getParameter(0) == null || getParameter(0).isEmpty()) {
-			goToPage(defaultAddress);
+			goToPage(defaultAddress, null);
 		} else {
-			goToPage(getParameter(0));
+			goToPage(getParameter(0), null);
 			defaultAddress = getParameter(0);
 		}
 
