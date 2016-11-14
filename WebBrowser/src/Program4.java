@@ -73,8 +73,8 @@ public class Program4 extends Application {
 	private Button backButton = new Button();
 	private Button forwardButton = new Button();
 
-	private Image back = new Image("https://i.gyazo.com/802bef2d69de6f917d4a0b66985f099b.png", 40, 40, true, true);
-	private Image forward = new Image("https://i.gyazo.com/d72ae41fc374cf0ee62a3ef739e7c95d.png", 40, 40, true, true);
+	private Image forward = new Image("https://i.gyazo.com/802bef2d69de6f917d4a0b66985f099b.png", 40, 40, true, true);
+	private Image back = new Image("https://i.gyazo.com/d72ae41fc374cf0ee62a3ef739e7c95d.jpg", 40, 40, true, true);
 	private Image back_gray = new Image("https://i.gyazo.com/15ee5f494367bb1c3c5291c9c6626e88.png", 40, 40, true, true);
 	private Image forward_gray = new Image("https://i.gyazo.com/2b6d3a99b9a582ee156d2ef143be7e9b.png", 40, 40, true, true);
 	
@@ -306,6 +306,14 @@ public class Program4 extends Application {
 			public void handle(MouseEvent event) {
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
 
+					if (findLevel(address.getText()) == (history.size()-1)){
+						forward.setGraphic(new ImageView(new Program4().forward_gray));
+					}
+					else {
+					goToPage(history.get(findLevel(address.getText()) + 1));
+					}
+				
+
 				} else if (event.getButton().equals(MouseButton.SECONDARY)) {
 					// right click
 				} else {
@@ -328,6 +336,7 @@ public class Program4 extends Application {
 		for (int i = history.size() - 1; 0 < i; i--) {
 			if (history.get(i).equals(URL)) {
 				location = i;
+				break;
 			}
 		}
 		return location;
@@ -418,6 +427,7 @@ public class Program4 extends Application {
 		// EventMegaHandler
 
 		// Home page stuff.
+		
 		if (getParameter(0) == null || getParameter(0).isEmpty()) {
 			goToPage(defaultAddress);
 		} else {
