@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.EventListener;
 import java.util.List;
 
+import javax.swing.event.HyperlinkEvent.EventType;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -60,60 +62,84 @@ import javafx.concurrent.Worker;
 public class Program4 extends Application {
 	// INSTANCE VARIABLES
 	// These variables are included to get you started.
-	private Stage stage = null;
-	private WebView view = null;
-	private WebEngine webEngine = null;
-	private TextField statusbar = null;
+	private Stage stage = null;		// Main stage for the program.
+	private WebView view = null;	// Main web view to access the Internet through.
+	private WebEngine webEngine = null;		// Main web engine to handle processing.
+	private TextField statusbar = null;		// StatusBar Text to be changed way too much.
 
 	// My variables.
-	private ArrayList<String> history = new ArrayList<String>();
-	private String defaultAddress = "http://www.bing.com";
-	private TextField address = new TextField(defaultAddress);
-	private Pane window = null;
+	private ArrayList<String> history = new ArrayList<String>();	// Array list to hold history.
+	private String defaultAddress = "http://www.bing.com";			// Default address, a home page.
+	private TextField address = new TextField(defaultAddress);		// Text field to hold the address of the page.
+	private Pane window = null;										// Window that everything hides in.
 
-	private int height = 600;
-	private int width = 800;
+	private int height = 600;	// Standard starting height.
+	private int width = 800;	// Standard starting width.
 
-	private Button backButton = new Button();
-	private Button forwardButton = new Button();
+	private Button backButton = new Button(); 	// Global back button
+	private Button forwardButton = new Button();	// Global forward button.
 
-	private Image forward = new Image("https://i.gyazo.com/802bef2d69de6f917d4a0b66985f099b.png", 40, 40, true, true);
-	private Image back = new Image("https://i.gyazo.com/d72ae41fc374cf0ee62a3ef739e7c95d.jpg", 40, 40, true, true);
-	private Image back_gray = new Image("https://i.gyazo.com/15ee5f494367bb1c3c5291c9c6626e88.png", 40, 40, true, true);
-	private Image forward_gray = new Image("https://i.gyazo.com/2b6d3a99b9a582ee156d2ef143be7e9b.png", 40, 40, true,
-			true);
+	private Image forward = new Image("https://i.gyazo.com/802bef2d69de6f917d4a0b66985f099b.png", 40, 40, true, true); // pretty button image
+	private Image back = new Image("https://i.gyazo.com/d72ae41fc374cf0ee62a3ef739e7c95d.jpg", 40, 40, true, true);		// pretty button image.
+	private Image back_gray = new Image("https://i.gyazo.com/15ee5f494367bb1c3c5291c9c6626e88.png", 40, 40, true, true); // pretty grayed out button image.
+	private Image forward_gray = new Image("https://i.gyazo.com/2b6d3a99b9a582ee156d2ef143be7e9b.png", 40, 40, true, true);	// pretty grayed out button image.
+		
 
-	/**
+	/**	
+	 * bindChain	true);	true);
 	 * 
+	 * @param statusBar	the StatusBar Box
+	 * @param view	The Viewing Box
+	 * @param commandBar	The command bar Box
+	 * @param verticalLayout	The layout everything goes in.
+	 * 
+	 * Sets up all the binding and limitations for the problems.
 	 */
 	private void bindChain(HBox statusBar, HBox view, HBox commandBar, VBox verticalLayout) {
+		// heights to bind to
 		ReadOnlyDoubleProperty heighto = stage.getScene().heightProperty();
+		// Width to bind to
 		ReadOnlyDoubleProperty widtho = stage.getScene().widthProperty();
 
 		// Main window
-		window.prefHeightProperty().bind(heighto.divide(1));
+		// Bind to stage
+		window.prefHeightProperty().bind(heighto);
+		// Bind to stage
 		window.prefWidthProperty().bind(widtho);
 
+		// Assign variables for the window property.
+		// height
 		ReadOnlyDoubleProperty height = window.heightProperty();
+		// width
 		ReadOnlyDoubleProperty width = window.widthProperty();
 
 		// Each component
-		verticalLayout.prefHeightProperty().bind(height.divide(1));
+		// binds vertical box to height.
+		verticalLayout.prefHeightProperty().bind(height);
+		// Bind vertical box width.
 		verticalLayout.prefWidthProperty().bind(width);
 
+		// Bind more things. and make it look pretty.
 		statusBar.prefHeightProperty().bind(height.multiply(0.05));
+		// All the binding
 		statusBar.prefWidthProperty().bind(width);
 
+		// Bind again, sizing properly.
 		view.prefHeightProperty().bind(height.multiply(0.90));
+		// Every binding.
 		view.prefWidthProperty().bind(width);
 
+		// Bind heights sized properly.
 		this.view.prefHeightProperty().bind(height.multiply(0.9));
-		;
+		// More Binding
 		this.view.prefWidthProperty().bind(width);
 
+		// another binding for size.
 		commandBar.prefHeightProperty().bind(height.multiply(0.05));
+		// STAY EXTENDED ACROSS THE SCREEN ! 
 		commandBar.prefWidthProperty().bind(width);
 		
+		// Bind web page Title to page.
 		stage.titleProperty().bind(webEngine.titleProperty());
 	}
 
@@ -132,6 +158,8 @@ public class Program4 extends Application {
 	}
 
 	/**
+	 * makeHtmlView
+	 * 
 	 * Creates a WebView which handles mouse and some keyboard events, and
 	 * manages scrolling automatically, so there's no need to put it into a
 	 * ScrollPane. The associated WebEngine is created automatically at
@@ -146,9 +174,11 @@ public class Program4 extends Application {
 	}
 
 	/**
-	 * Generates the status bar layout and text field.
+	 *	makeStatusBar
 	 * 
 	 * @return statusbarPane - the HBox layout that contains the statusbar.
+	 * 
+	 *  Generates the status bar layout and text field.
 	 */
 	private HBox makeStatusBar() {
 		HBox statusbarPane = new HBox();
@@ -167,28 +197,42 @@ public class Program4 extends Application {
 	/**
 	 * setupCommandBar
 	 * 
-	 * @return Returns an HBox with a GUI layout for command proccessing.
+	 * @return Returns an HBox with a GUI layout for command processing.
+	 * 
+	 * sets up the commandBar layout.
 	 */
 	private HBox setupCommandBar() {
 		// Layout box
 		HBox commandBar = new HBox();
 		// Fill it up, and size it properly.
 		commandBar.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, new CornerRadii(0), new Insets(0))));
+		// yay sizing.
 		commandBar.setPrefSize(width, height * 0.05);
 
 		// Buttons for controls.
+		// Make the back button
 		Button back = this.backButton;
+		// re reference for instance.
 		this.backButton = back;
+		// MAKE IT PRETTY
 		back.setGraphic(new ImageView(this.back));
+		// Make the forward button.
 		Button forward = this.forwardButton;
+		// re reference for instance.
 		this.forwardButton = forward;
+		// MAKE IT PRETTY
 		forward.setGraphic(new ImageView(this.forward));
+		// Make a go button.
 		Button go = new Button();
+		// Make it pretty.
 		go.setGraphic(new ImageView(
 				new Image("https://i.gyazo.com/747841ba38d0ab903f1a6939322acb76.png", 40, 40, true, true)));
+		// Home Button for reasons.
 		Button home = new Button();
+		// Home button should be a house.
 		home.setGraphic(new ImageView(
 				new Image("https://i.gyazo.com/1c069a908c0f512b91278616f7554751.png", 40, 40, true, true)));
+		// Help button, simple and small.
 		Button help = new Button("?");
 		
 		// Add Events for buttons.
@@ -196,6 +240,7 @@ public class Program4 extends Application {
 
 		// Make the address bar fairly normally sized.
 		address.prefWidthProperty().bind(commandBar.prefWidthProperty().multiply(0.65));
+		// and across the screen.
 		address.prefHeightProperty().bind(commandBar.prefHeightProperty());
 
 		// Add spacing to make it look decent.
@@ -208,38 +253,55 @@ public class Program4 extends Application {
 
 			@Override
 			public void handle(KeyEvent event) {
+				// If I hit the enter button.
 				if (event.getCode().equals(KeyCode.ENTER)) {
+					// Literally, just load the freaking page.
 					goToPage(address.getText(), null);
 				}
 
 			}
 
 		});
-
+		// Add everything in.
 		commandBar.getChildren().addAll(back, forward, address, go, home ,help);
+		// Return the command bar.
 		return commandBar;
 	}
 
 	/**
+	 * goToPage
 	 * 
-	 * @param URL
+	 * @param URL The URL to go to.
+	 * 
+	 * method to send someone to a page.
 	 */
 	private void goToPage(String URL, String path) {
+		// If it doesn't exist.
 		if (URL == null || URL.isEmpty() || URL.trim().isEmpty()) {
 			// Do nothing.
 		} else {
+			// If it doesn't contain the http proto, 
 			if ((!(URL.contains("http://"))) && (!(URL.contains("https://")))) {
+				// add it in.
 				URL = "http://" + URL;
 			}
+			// LOAD THE PAGE
 			webEngine.load(URL);
+			// SET THE ADDRESS
 			address.setText(URL);
+			// If the path is null
 			if (path == null) {
+				// add it to history bar.
 				history.add(URL);
 			}
+			// New page, so back button should be green again.
 			this.backButton.setGraphic(new ImageView(this.back));
+			// Do stuff for the forward button.
 			if (findLevel(address.getText()) == (history.size() - 1)) {
+				// set the forward button to grayed out. because there's nothing to to.
 				this.forwardButton.setGraphic(new ImageView(this.forward_gray));
 			} else {
+				// else set it green and let it do it's thing.
 				this.forwardButton.setGraphic(new ImageView(this.forward));
 			}
 		}
@@ -248,97 +310,145 @@ public class Program4 extends Application {
 	/**
 	 * buttonEvents
 	 * 
-	 * @param back
-	 * @param forward
-	 * @param go
-	 * @param home
+	 * @param back 	back button
+	 * @param forward	forward button
+	 * @param go	go button
+	 * @param home	home button
+	 * @param help	help button
 	 * 
 	 *            Starts the event listeners for the specific buttons in the
 	 *            commandBar.
 	 */
 	private void buttonEvents(Button back, Button forward, Button go, Button home, Button help) {
 
+		// If the go button is clicked.
 		go.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
+			// Do your thing
 			@Override
 			public void handle(MouseEvent event) {
+				// If you left click.
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
+					// Go to page in the address bar.
 					goToPage(address.getText(), null);
-				} else if (event.getButton().equals(MouseButton.SECONDARY)) {
+				} 
+				// if you right click.
+				else if (event.getButton().equals(MouseButton.SECONDARY)) {
 					// plan to allow changes of home page.
-				} else {
+				} 
+				// odd clicks, multiple button mice and scroll clicks.
+				else {
 					// maybe do something on scroll wheel click? maybe not?
 				}
 			}
 		});
 
+		// On home button clicked.
 		home.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
+			// do your thing.
 			@Override
 			public void handle(MouseEvent event) {
+				// left click here.
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
+					// go back to home page.
 					goToPage(defaultAddress, null);
-				} else if (event.getButton().equals(MouseButton.SECONDARY)) {
+				} 
+				// if you right click.
+				else if (event.getButton().equals(MouseButton.SECONDARY)) {
 					// right click
-				} else {
+				} 
+				// odd clicks, multiple button mice and scroll clicks.
+				else {
 					// maybe do something on scroll wheel click? maybe not?
 				}
 
 			}
 		});
 
+		// on back button clicked.
 		back.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
+			// do your thing.
 			@Override
 			public void handle(MouseEvent event) {
+				// If left clicked.
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
+					// if you're on the initial history.
 					if (findLevel(address.getText()) == 0) {
+						// Make the button gray, you can't use it.
 						back.setGraphic(new ImageView(new Program4().back_gray));
-					} else {
+					}
+					// otherwise.
+					else {
+						// go to the previous page.
+						// No the word tacos has no real usage, it's just not null
 						goToPage(history.get(findLevel(address.getText()) - 1), "tacos");
 					}
-				} else if (event.getButton().equals(MouseButton.SECONDARY)) {
+				} 
+				// Right click!
+				else if (event.getButton().equals(MouseButton.SECONDARY)) {
 					// right click
 
-				} else {
+				} 
+				// odd clicks, multiple button mice and scroll clicks.
+				else {
 					// maybe do something on scroll wheel click? maybe not?
 				}
 			}
 
 		});
+		
+		// On forward button clicked.
 		forward.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
+			// DO YOUR THING.
 			@Override
 			public void handle(MouseEvent event) {
+				// LEFT CLICK.
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
-
+					// if the page is the most current page.
 					if (findLevel(address.getText()) == (history.size())) {
-						System.out.println(findLevel(address.getText()));
+						// make it grey.  
 						forward.setGraphic(new ImageView(new Program4().forward_gray));
-					} else {
-						goToPage(history.get(findLevel(address.getText())), "yas");
+					} 
+					// Otherwise, go to the next page in history.
+					else {
+						// Go to the next page in history.
+						// I like muffins.
+						goToPage(history.get(findLevel(address.getText())), "muffins");
 					}
 
-				} else if (event.getButton().equals(MouseButton.SECONDARY)) {
+				} 
+				// RIGHT CLICK.
+				else if (event.getButton().equals(MouseButton.SECONDARY)) {
 					// right click
-				} else {
+				} 
+				// odd clicks, multiple button mice and scroll clicks.
+				else {
 					// maybe do something on scroll wheel click? maybe not?
 				}
 			}
 
 		});
 
+		// When the help button is clicked.
 		help.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
+				// light left click.
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
 
 					// add in a help page
 					
-				} else if (event.getButton().equals(MouseButton.SECONDARY)) {
+				}
+				// Lovely right click.
+				else if (event.getButton().equals(MouseButton.SECONDARY)) {
 					// right click
-				} else {
+				} 
+				// odd clicks, multiple button mice and scroll clicks.
+				else {
 					// maybe do something on scroll wheel click? maybe not?
 				}
 			}
@@ -347,19 +457,28 @@ public class Program4 extends Application {
 	}
 
 	/**
+	 * findLevel
 	 * 
 	 * @param URL
 	 *            URL to be matched to history level.
 	 * @return The level of history found.
+	 * 
+	 * Finds the level of history the page is on.
 	 */
 	private int findLevel(String URL) {
+		// Location starts at the last entry.
 		int location = history.size() - 1;
+		// Iterate through
 		for (int i = history.size() - 1; 0 < i; i--) {
+			// If the URL matches the current.
 			if (history.get(i).equals(URL)) {
+				// set location to the value.
 				location = i;
+				// out of the loop, because efficiency.
 				break;
 			}
 		}
+		// Return the level.
 		return location;
 	}
 
@@ -380,13 +499,16 @@ public class Program4 extends Application {
 	 * 
 	 * @return Returns an HBox
 	 * 
-	 *         Returns a set box to contain the webView and engine components.
+	 *  Returns a set box to contain the webView and engine components.
 	 */
 	private HBox setupView() {
+		// New holder
 		HBox view = new HBox();
-		view.setBackground(new Background(new BackgroundFill(Color.PINK, new CornerRadii(0), new Insets(0))));
+		// Set the initial size.
 		view.setPrefSize(width, height * 0.85);
+		// add the web view
 		view.getChildren().add(makeHtmlView());
+		// return the layout.
 		return view;
 	}
 
@@ -402,46 +524,33 @@ public class Program4 extends Application {
 		VBox yLayout = new VBox();
 		// Force the kids into it... It happens.
 		yLayout.getChildren().addAll(nodes);
+		// return the layout.
 		return yLayout;
 
 	}
 
 	/**
-	 * 
+	 *  statusBarEvent
+	 *  
+	 *  Captures the usage of hyper links in the status bar.
 	 */
 	private void statusBarEvent() {
-		webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
-			public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
-				
-				
-				if (newState.equals(Worker.State.SUCCEEDED)) {
-					EventListener listener = new EventListener() {
-						public void handleEvent(Event event) {
-							address.setText(( (Element) event.getTarget()).getAttribute("href").toString());
-						}
-					};
-					
-					
-				}
-				
-				
-				NodeList list = webEngine.getDocument().getElementsByTagName("a");
-				for (int i = 0; i < list.getLength(); i++) {
-					
-				}
-				
-			}
+		// Get the hyper link change event.
+		webEngine.setOnStatusChanged( e -> {
+			// Set the status bar to that URL and remove all the extra numbers.
+			statusbar.setText(e.toString().substring(94, e.toString().length()-1));
 		});
+	
 	}
 	
 	
 	/**
 	 * 
 	 */
-	private void engineEvents(){
-	//	webEngine.
-	
+	private void engineEvents() {
+		// make the address bar change on page change.
 	}
+	
 	/**
 	 * The main entry point for all JavaFX applications. The start method is
 	 * called after the init method has returned, and after the system is ready
@@ -459,7 +568,9 @@ public class Program4 extends Application {
 		this.stage = stage;
 
 		// Initial setup of window.
+		// Initial height
 		stage.setHeight(height);
+		// Initial Width
 		stage.setWidth(width);
 
 		// Start with a basic pane
@@ -468,8 +579,11 @@ public class Program4 extends Application {
 		window.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(0), new Insets(0))));
 
 		// Setup the general window layout.
+		// Make commandBar component.
 		HBox commandBar = setupCommandBar();
+		// Make the view component.
 		HBox view = setupView();
+		// Make statusBar component.
 		HBox statusBar = makeStatusBar();
 
 		// setup the layout.
@@ -480,26 +594,36 @@ public class Program4 extends Application {
 
 		// Make the magic happen.
 		Scene scene = new Scene(window);
+		// Set the scene.
 		stage.setScene(scene);
+		// Very important, like showing up to work.
 		stage.show();
 
 		// Setup up resizing binds.
 		bindChain(statusBar, view, commandBar, verticalLayout);
+		// Active statusBarEvents
 		statusBarEvent();
+		// Activate engineEvents.
 		engineEvents();
-		// EventMegaHandler
 
 		// Home page stuff.
 
+		// If there's no parameter.
 		if (getParameter(0) == null || getParameter(0).isEmpty()) {
+			// go to default home page.
 			goToPage(defaultAddress, null);
-		} else {
+		}
+		// if there is a parameter.
+		else {
+			// go to it.
 			goToPage(getParameter(0), null);
+			// also home button now take you there.
 			defaultAddress = getParameter(0);
 		}
 
 	}
-
+	
+	
 	/**
 	 * The main( ) method is ignored in JavaFX applications. main( ) serves only
 	 * as fallback in case the application is launched as a regular Java
@@ -509,6 +633,7 @@ public class Program4 extends Application {
 	 *            the command line arguments
 	 */
 	public static void main(String[] args) {
+		// START YOUR ENGINES.
 		launch(args);
 	}
 }
