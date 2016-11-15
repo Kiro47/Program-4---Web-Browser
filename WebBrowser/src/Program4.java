@@ -5,7 +5,11 @@
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EventListener;
 import java.util.List;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -16,7 +20,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -45,8 +51,7 @@ import javafx.scene.web.WebHistory.Entry;
 import javafx.stage.Stage;
 import javafx.concurrent.Worker.State;
 import javafx.concurrent.Worker;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
+
 
 /**
  * The main class for Program5. Program5 constructs the JavaFX window and
@@ -108,7 +113,7 @@ public class Program4 extends Application {
 
 		commandBar.prefHeightProperty().bind(height.multiply(0.05));
 		commandBar.prefWidthProperty().bind(width);
-
+		
 		stage.titleProperty().bind(webEngine.titleProperty());
 	}
 
@@ -184,9 +189,10 @@ public class Program4 extends Application {
 		Button home = new Button();
 		home.setGraphic(new ImageView(
 				new Image("https://i.gyazo.com/1c069a908c0f512b91278616f7554751.png", 40, 40, true, true)));
-
+		Button help = new Button("?");
+		
 		// Add Events for buttons.
-		buttonEvents(back, forward, go, home);
+		buttonEvents(back, forward, go, home, help);
 
 		// Make the address bar fairly normally sized.
 		address.prefWidthProperty().bind(commandBar.prefWidthProperty().multiply(0.65));
@@ -210,7 +216,7 @@ public class Program4 extends Application {
 
 		});
 
-		commandBar.getChildren().addAll(back, forward, address, go, home);
+		commandBar.getChildren().addAll(back, forward, address, go, home ,help);
 		return commandBar;
 	}
 
@@ -250,7 +256,7 @@ public class Program4 extends Application {
 	 *            Starts the event listeners for the specific buttons in the
 	 *            commandBar.
 	 */
-	private void buttonEvents(Button back, Button forward, Button go, Button home) {
+	private void buttonEvents(Button back, Button forward, Button go, Button home, Button help) {
 
 		go.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -308,7 +314,6 @@ public class Program4 extends Application {
 
 					if (findLevel(address.getText()) == (history.size())) {
 						System.out.println(findLevel(address.getText()));
-						System.out.println("310");
 						forward.setGraphic(new ImageView(new Program4().forward_gray));
 					} else {
 						goToPage(history.get(findLevel(address.getText())), "yas");
@@ -323,6 +328,22 @@ public class Program4 extends Application {
 
 		});
 
+		help.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				if (event.getButton().equals(MouseButton.PRIMARY)) {
+
+					// add in a help page
+					
+				} else if (event.getButton().equals(MouseButton.SECONDARY)) {
+					// right click
+				} else {
+					// maybe do something on scroll wheel click? maybe not?
+				}
+			}
+
+		});
 	}
 
 	/**
@@ -386,6 +407,42 @@ public class Program4 extends Application {
 	}
 
 	/**
+	 * 
+	 */
+	private void statusBarEvent() {
+		webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
+			public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
+				
+				
+				if (newState.equals(Worker.State.SUCCEEDED)) {
+					EventListener listener = new EventListener() {
+						public void handleEvent(Event event) {
+							address.setText(( (Element) event.getTarget()).getAttribute("href").toString());
+						}
+					};
+					
+					
+				}
+				
+				
+				NodeList list = webEngine.getDocument().getElementsByTagName("a");
+				for (int i = 0; i < list.getLength(); i++) {
+					
+				}
+				
+			}
+		});
+	}
+	
+	
+	/**
+	 * 
+	 */
+	private void engineEvents(){
+	//	webEngine.
+	
+	}
+	/**
 	 * The main entry point for all JavaFX applications. The start method is
 	 * called after the init method has returned, and after the system is ready
 	 * for the application to begin running.
@@ -428,7 +485,8 @@ public class Program4 extends Application {
 
 		// Setup up resizing binds.
 		bindChain(statusBar, view, commandBar, verticalLayout);
-
+		statusBarEvent();
+		engineEvents();
 		// EventMegaHandler
 
 		// Home page stuff.
