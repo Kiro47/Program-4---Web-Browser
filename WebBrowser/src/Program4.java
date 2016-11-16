@@ -572,8 +572,6 @@ public class Program4 extends Application {
 					// set the forward button to grayed out. because there's nothing
 					// to to.
 					forwardButton.setGraphic(new ImageView(forward_gray));
-					
-					stage.getIcons().add(icon);
 				}
 			}
 		});
@@ -648,7 +646,8 @@ public class Program4 extends Application {
 			// also home button now take you there.
 			defaultAddress = getParameter(0);
 		}
-
+		// All the pretty.
+		stage.getIcons().add(icon);
 	}
 
 	/**
