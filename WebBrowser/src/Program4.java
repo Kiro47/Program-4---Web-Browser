@@ -222,13 +222,13 @@ public class Program4 extends Application {
 		// re reference for instance.
 		this.backButton = back;
 		// MAKE IT PRETTY
-		back.setGraphic(new ImageView(this.back_gray));
+		back.setGraphic(new ImageView(back_gray));
 		// Make the forward button.
 		Button forward = this.forwardButton;
 		// re reference for instance.
 		this.forwardButton = forward;
 		// MAKE IT PRETTY
-		forward.setGraphic(new ImageView(this.forward_gray));
+		forward.setGraphic(new ImageView(forward_gray));
 		// Make a go button.
 		Button go = new Button();
 		// Make it pretty.
@@ -312,21 +312,21 @@ public class Program4 extends Application {
 			// If you're on the original page.
 			if (level - 1 == 0) {
 				// gray out button
-				this.backButton.setGraphic( new ImageView(this.back_gray));
+				this.backButton.setGraphic( new ImageView(back_gray));
 			}
 			// otherwise
 			else {
 				// color button
-				this.backButton.setGraphic(new ImageView(this.back));
+				this.backButton.setGraphic(new ImageView(back));
 			}
 			// Do stuff for the forward button.
 			if (level + 1  == (history.size() - 1)) {
 				// set the forward button to grayed out. because there's nothing
 				// to to.
-				this.forwardButton.setGraphic(new ImageView(this.forward_gray));
+				this.forwardButton.setGraphic(new ImageView(forward_gray));
 			} else {
 				// else set it green and let it do it's thing.
-				this.forwardButton.setGraphic(new ImageView(this.forward));
+				this.forwardButton.setGraphic(new ImageView(forward));
 			}
 		}
 	}
@@ -406,7 +406,7 @@ public class Program4 extends Application {
 					// if you're on the initial history.
 					if (level == 0) {
 						// Make the button gray, you can't use it.
-						back.setGraphic(new ImageView(new Program4().back_gray));
+						back.setGraphic(new ImageView(back_gray));
 					}
 					// otherwise.
 					else {
@@ -442,7 +442,7 @@ public class Program4 extends Application {
 					// if the page is the most current page.
 					if (level == history.size() - 1) {
 						// make it grey.
-						forward.setGraphic(new ImageView(new Program4().forward_gray));
+						forward.setGraphic(new ImageView(forward_gray));
 					}
 					// Otherwise, go to the next page in history.
 					else {
