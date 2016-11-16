@@ -2,6 +2,7 @@
 // IMPORTS
 // These are some classes that may be useful for completing the project.
 // You may have to add others.
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,9 @@ import javafx.stage.Stage;
 
 /**
  * @author James Helm
- * @version 1.0 Date Last Modified : 11 - 16 - 2016
+ * @version 1.0 Date
+ * 
+ *          Last Modified : 11 - 16 - 2016
  * 
  * 
  *          The main class for Program5. Program5 constructs the JavaFX window
@@ -73,21 +76,25 @@ public class Program4 extends Application {
 	private Button backButton = new Button(); // Global back button
 	private Button forwardButton = new Button(); // Global forward button.
 
-	private static Image forward = new Image("https://i.gyazo.com/802bef2d69de6f917d4a0b66985f099b.png", 40, 40, true, true); // pretty
-																														// button
-																														// image
-	private static Image back = new Image("https://i.gyazo.com/d72ae41fc374cf0ee62a3ef739e7c95d.jpg", 40, 40, true, true); // pretty
-																													// button
-																													// image.
-	private static Image back_gray = new Image("https://i.gyazo.com/15ee5f494367bb1c3c5291c9c6626e88.png", 40, 40, true, true); // pretty
-																															// grayed
-																															// out
-																															// button
-																															// image.
-	private static Image forward_gray = new Image("https://i.gyazo.com/2b6d3a99b9a582ee156d2ef143be7e9b.png", 40, 40, true,
-			true); // pretty grayed out button image.
-
+	private static Image forward = new Image("https://i.gyazo.com/802bef2d69de6f917d4a0b66985f099b.png", 40, 40, true,
+			true); // pretty
+	// button
+	// image
+	private static Image back = new Image("https://i.gyazo.com/d72ae41fc374cf0ee62a3ef739e7c95d.jpg", 40, 40, true,
+			true); // pretty
+	// button
+	// image.
+	private static Image back_gray = new Image("https://i.gyazo.com/15ee5f494367bb1c3c5291c9c6626e88.png", 40, 40, true,
+			true); // pretty
+	// grayed
+	// out
+	// button
+	// image.
+	private static Image forward_gray = new Image("https://i.gyazo.com/2b6d3a99b9a582ee156d2ef143be7e9b.png", 40, 40,
+			true, true); // pretty grayed out button image.
+	private static Image helpSheet = new Image("/HelpSheet.png");
 	private static Image icon = new Image("https://i.gyazo.com/d47d64119c8c0821abe581e575bf43d5.png"); // Icon
+
 	/**
 	 * bindChain true); true);
 	 * 
@@ -308,11 +315,11 @@ public class Program4 extends Application {
 			webEngine.load(URL);
 
 			// New page, so back button should be green again.
-			
+
 			// If you're on the original page.
 			if (level - 1 == 0) {
 				// gray out button
-				this.backButton.setGraphic( new ImageView(back_gray));
+				this.backButton.setGraphic(new ImageView(back_gray));
 			}
 			// otherwise
 			else {
@@ -320,7 +327,7 @@ public class Program4 extends Application {
 				this.backButton.setGraphic(new ImageView(back));
 			}
 			// Do stuff for the forward button.
-			if (level + 1  == (history.size() - 1)) {
+			if (level + 1 == (history.size() - 1)) {
 				// set the forward button to grayed out. because there's nothing
 				// to to.
 				this.forwardButton.setGraphic(new ImageView(forward_gray));
@@ -473,9 +480,8 @@ public class Program4 extends Application {
 				// light left click.
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
 
-					// add in a help page
-				
-					
+					goToPage("https://i.gyazo.com/e01f712f5ac4136f1a1ce0cead285e04.png", null);
+
 				}
 				// Lovely right click.
 				else if (event.getButton().equals(MouseButton.SECONDARY)) {
@@ -490,6 +496,21 @@ public class Program4 extends Application {
 		});
 	}
 
+	private void showHelpPage() {
+		Stage stage = new Stage();
+		Pane pane = new Pane();
+		
+		
+		pane.getChildren().add(new ImageView(helpSheet));
+		
+		stage.setWidth(width);
+		stage.setHeight(height);
+		
+		stage.centerOnScreen();
+		Scene scene= new Scene(pane);
+		stage.setScene(scene);
+		stage.show();
+	}
 	/**
 	 * 
 	 */
@@ -566,10 +587,11 @@ public class Program4 extends Application {
 					// Add URL to history.
 					history.add(webEngine.getLocation());
 					// Reset Level
-					level = history.size() -1;
+					level = history.size() - 1;
 					// color button
 					backButton.setGraphic(new ImageView(back));
-					// set the forward button to grayed out. because there's nothing
+					// set the forward button to grayed out. because there's
+					// nothing
 					// to to.
 					forwardButton.setGraphic(new ImageView(forward_gray));
 				}
