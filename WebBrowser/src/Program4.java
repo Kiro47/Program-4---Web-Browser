@@ -496,21 +496,6 @@ public class Program4 extends Application {
 		});
 	}
 
-	private void showHelpPage() {
-		Stage stage = new Stage();
-		Pane pane = new Pane();
-		
-		
-		pane.getChildren().add(new ImageView(helpSheet));
-		
-		stage.setWidth(width);
-		stage.setHeight(height);
-		
-		stage.centerOnScreen();
-		Scene scene= new Scene(pane);
-		stage.setScene(scene);
-		stage.show();
-	}
 	/**
 	 * 
 	 */
