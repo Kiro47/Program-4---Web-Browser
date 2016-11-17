@@ -2,7 +2,6 @@
 // IMPORTS
 // These are some classes that may be useful for completing the project.
 // You may have to add others.
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +91,6 @@ public class Program4 extends Application {
 	// image.
 	private static Image forward_gray = new Image("https://i.gyazo.com/2b6d3a99b9a582ee156d2ef143be7e9b.png", 40, 40,
 			true, true); // pretty grayed out button image.
-	private static Image helpSheet = new Image("/HelpSheet.png");
 	private static Image icon = new Image("https://i.gyazo.com/d47d64119c8c0821abe581e575bf43d5.png"); // Icon
 
 	/**
@@ -480,7 +478,7 @@ public class Program4 extends Application {
 				// light left click.
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
 
-					goToPage("https://i.gyazo.com/e01f712f5ac4136f1a1ce0cead285e04.png", null);
+					goToPage("https://i.gyazo.com/4a45a1c7e43a342f35b4c2bec131483f.png", null);
 
 				}
 				// Lovely right click.
